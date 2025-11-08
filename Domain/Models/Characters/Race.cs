@@ -11,13 +11,13 @@ public class Race
     
     public Size Size { get; set; }
     public int BaseSpeed { get; set; }
-    public List<string> Languages { get; set; } = new();
+    public List<Language> Languages { get; set; } = new();
     
     public Dictionary<AbilityScore, int> AbilityScoreIncreases { get; set; } = new();
     
     public List<Guid> RacialFeatureIds { get; set; } = new();
     
-    public Dictionary<string, int> Senses { get; set; } = new();
+    public Dictionary<SenseType, int> Senses { get; set; } = new();
     
     public List<SubRace> SubRaces { get; set; } = new();
 }

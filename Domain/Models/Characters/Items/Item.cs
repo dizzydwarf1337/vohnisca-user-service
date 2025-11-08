@@ -18,5 +18,5 @@ public class Item
     
     public ItemRequirements? Requirements { get; set; }
     
-    public string Source { get; set; } // "DMG", "PHB", и т.д.
+    public string Source { get; set; }
 }

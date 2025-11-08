@@ -6,5 +6,5 @@ public class ASIChoice
 {
     public bool IsFeat { get; set; }
     public Guid? FeatId { get; set; }
-    public Dictionary<AbilityScore, int>? AbilityIncreases { get; set; } // Если ASI
+    public Dictionary<AbilityScore, int>? AbilityIncreases { get; set; } 
 }

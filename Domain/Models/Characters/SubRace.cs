@@ -16,10 +16,10 @@ public class SubRace
     
     public int? SpeedOverride { get; set; }
     
-    public List<string> BonusLanguages { get; set; } = new();
+    public List<Language> BonusLanguages { get; set; } = new();
     
     public List<WeaponProperty> BonusWeaponProficiencies { get; set; } = new();
-    public List<string> BonusToolProficiencies { get; set; } = new();
+    public List<ToolProficiency> BonusToolProficiencies { get; set; } = new();
     
-    public Dictionary<string, int> BonusSenses { get; set; } = new();
+    public Dictionary<SenseType, int> BonusSenses { get; set; } = new();
 }

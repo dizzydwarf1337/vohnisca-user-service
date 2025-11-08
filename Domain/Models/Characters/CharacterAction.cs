@@ -14,7 +14,8 @@ public class CharacterAction
     public Guid SourceId { get; set; } 
     
     public int? AttackBonus { get; set; }
-    public string DamageDice { get; set; }
+    public DiceType? DamageDiceType { get; set; }
+    public int? DamageDiceCount { get; set; }
     public DamageType? DamageType { get; set; }
     public int? DamageBonus { get; set; }
     

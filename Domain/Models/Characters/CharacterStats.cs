@@ -11,12 +11,12 @@ public class CharacterStats
     private readonly List<CharacterAbility> _abilities = new();
     public IReadOnlyList<CharacterAbility> Abilities => _abilities.AsReadOnly();
     
-    public List<string> Languages { get; set; } = new();
-    public List<string> ToolProficiencies { get; set; } = new();
+    public List<Language> Languages { get; set; } = new();
+    public List<ToolProficiency> ToolProficiencies { get; set; } = new();
     public List<WeaponProperty> WeaponProficiencies { get; set; } = new();
     public List<ArmorType> ArmorProficiencies { get; set; } = new();
     
-    public Dictionary<string, int> Senses { get; set; } = new();
+    public Dictionary<SenseType, int> Senses { get; set; } = new();
     
     public int GetSkillModifier(Skill skill)
     {

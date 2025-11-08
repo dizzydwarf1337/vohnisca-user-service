@@ -11,7 +11,7 @@ public class ResourcePool
     public string DisplayName { get; set; }
     public string Description { get; set; }
     
-    public int? DiceSize { get; set; }
+    public DiceType? DiceType { get; set; }
     
     public string? Formula { get; set; }
     

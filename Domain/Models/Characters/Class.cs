@@ -11,13 +11,13 @@ public class Class
     public string Source { get; set; } 
     public string IconUrl { get; set; }
     
-    public int HitDieSize { get; set; }
+    public DiceType HitDie { get; set; }
     public AbilityScore PrimaryStat { get; set; }
     public List<AbilityScore> SavingThrowProficiencies { get; set; } = new();
 
     public List<ArmorType> StartingArmorProficiencies { get; set; } = new();
     public List<WeaponProperty> StartingWeaponProficiencies { get; set; } = new();
-    public List<string> StartingToolProficiencies { get; set; } = new();
+    public List<ToolProficiency> StartingToolProficiencies { get; set; } = new();
     
     public int SkillChoiceCount { get; set; }
     public List<Skill> AvailableSkills { get; set; } = new();
@@ -36,6 +36,6 @@ public class Class
     
     public List<ArmorType>? MulticlassArmorProficiencies { get; set; }
     public List<WeaponProperty>? MulticlassWeaponProficiencies { get; set; }
-    public List<string>? MulticlassToolProficiencies { get; set; }
+    public List<ToolProficiency>? MulticlassToolProficiencies { get; set; }
     public int? MulticlassSkillChoiceCount { get; set; }
 }

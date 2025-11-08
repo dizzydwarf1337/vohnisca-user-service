@@ -14,7 +14,7 @@ public class Subclass
     
     public List<ArmorType>? BonusArmorProficiencies { get; set; }
     public List<WeaponProperty>? BonusWeaponProficiencies { get; set; }
-    public List<string>? BonusToolProficiencies { get; set; }
+    public List<ToolProficiency>? BonusToolProficiencies { get; set; }
     
     public List<ClassLevelProgression> LevelProgressions { get; set; } = new();
     

@@ -12,10 +12,10 @@ public class Background
     
     public List<Skill> SkillProficiencies { get; set; } = new();
     
-    public List<string> ToolProficiencies { get; set; } = new();
+    public List<ToolProficiency> ToolProficiencies { get; set; } = new();
     
     public int AvailableLanguages { get; set; }
-    public List<string> GrantedLanguages { get; set; } = new(); 
+    public List<Language> GrantedLanguages { get; set; } = new(); 
     
     public List<Item> StartingEquipment { get; set; } = new();
     public Currency StartingMoney { get; set; } = new();
