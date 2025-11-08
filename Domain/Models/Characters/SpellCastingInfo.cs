@@ -2,13 +2,12 @@ using Domain.Models.Characters.Enums;
 
 namespace Domain.Models.Characters;
 
-public class SpellcastingInfo
+public class SpellCastingInfo
 {
     public Guid ClassDefinitionId { get; set; } 
     public SpellcastingType Type { get; set; } 
     public AbilityScore SpellcastingAbility { get; set; }
     
-    // Вычисляемые значения
     public int SpellSaveDC { get; set; } 
     public int SpellAttackBonus { get; set; } 
 

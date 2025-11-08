@@ -2,7 +2,7 @@ using Domain.Models.Characters.Enums;
 
 namespace Domain.Models.Characters;
 
-public class FeatureRequirements
+public class EquipmentSlots
 {
     public int? MinLevel { get; set; }
     

@@ -1,3 +1,5 @@
+using Domain.Models.Characters.Enums;
+
 namespace Domain.Models.Characters;
 
 public class FeatureUsage

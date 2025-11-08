@@ -15,13 +15,3 @@ public class ResourcePool
     
     public string? Formula { get; set; } 
 }
-
-public enum UsageType
-{
-    Unlimited,
-    ShortRest,
-    LongRest,
-    Daily,
-    Weekly,
-    Recharge 
-}
