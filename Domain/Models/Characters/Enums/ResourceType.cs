@@ -2,7 +2,7 @@ namespace Domain.Models.Characters.Enums;
 
 public enum ResourceType
 {
-    // Общие для заклинателей
+    // Сommon
     KnownCantrips,
     SpellSlot1,
     SpellSlot2,
@@ -72,17 +72,15 @@ public enum ResourceType
     InfusionsKnown,
     InfusedItems,
     
-    // Специальные
     SuperiorityDice, // Battle Master
     SuperiorityDiceSize,
     Maneuvers,
     
-    ExtraAttack, // Количество дополнительных атак
+    ExtraAttack,
     
-    // Подклассовые ресурсы
-    SpellPoints, // Некоторые хоумбрю
-    FavoredFoe, // Ranger Tasha's
-    PrimalAwareness, // Ranger
+    SpellPoints,
+    FavoredFoe, 
+    PrimalAwareness, 
     
     // Monastic Traditions
     OpenHandTechnique,

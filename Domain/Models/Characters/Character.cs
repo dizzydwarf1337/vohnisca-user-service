@@ -12,6 +12,7 @@ public class Character
     public Guid RaceId { get; set; }
     public Guid? SubRaceId { get; set; }
     public Guid BackgroundId { get; set; }
+    public Guid? ConcentratingOnSpellId { get; set; }
     
     public Alignment Alignment { get; set; }
     
@@ -38,6 +39,7 @@ public class Character
     
     public Dictionary<int, int> HitDice { get; set; } = new();
     public Dictionary<int, int> HitDiceUsed { get; set; } = new();
+    public int AttacksPerAction { get; set; } = 1;
     
     public int DeathSaveSuccesses { get; set; }
     public int DeathSaveFailures { get; set; }

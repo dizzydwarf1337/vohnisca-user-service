@@ -19,6 +19,8 @@ public class SpellcastingInfo
     
     public List<Guid> PreparedSpellIds { get; set; } = new();
     
+    public int MaxPreparedSpells { get; set; }
+    
     public List<Guid> AlwaysPreparedSpellIds { get; set; } = new();
     
     public int KnownCantrips { get; set; }
