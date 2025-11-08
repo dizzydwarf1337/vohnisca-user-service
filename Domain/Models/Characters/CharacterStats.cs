@@ -10,7 +10,7 @@ public class CharacterStats
     
     private readonly List<CharacterAbility> _abilities = new();
     public IReadOnlyList<CharacterAbility> Abilities => _abilities.AsReadOnly();
-
+    
     public List<string> Languages { get; set; } = new();
     public List<string> ToolProficiencies { get; set; } = new();
     public List<WeaponProperty> WeaponProficiencies { get; set; } = new();
@@ -32,13 +32,19 @@ public class CharacterStats
         var abilityData = _abilities.FirstOrDefault(a => a.Ability == ability);
         return abilityData?.AbilityModifier ?? 0;
     }
-
+    
     public int GetAbilityValue(AbilityScore ability)
     {
         var abilityData = _abilities.FirstOrDefault(a => a.Ability == ability);
         return abilityData?.AbilityValue ?? 10;
     }
-
+    
+    public int GetSavingThrowModifier(AbilityScore ability)
+    {
+        var abilityData = _abilities.FirstOrDefault(a => a.Ability == ability);
+        return abilityData?.GetSavingThrowModifier(ProficiencyBonus) ?? 0;
+    }
+    
     public int GetCarryingCapacity()
     {
         return GetAbilityValue(AbilityScore.Strength) * 15;
@@ -70,6 +76,8 @@ public class CharacterStats
             ability.Ability,
             ability.AbilityValue,
             ability.AbilityModifier,
+            ability.HasSavingThrowProficiency, 
+            ability.GetSavingThrowModifier(ProficiencyBonus), 
             ability.Skills.Select(s => new SkillInfo(
                 s.Skill,
                 s.Proficiency,
@@ -109,6 +117,12 @@ public class CharacterStats
         charSkill?.SetProficiency(proficiency);
     }
     
+    public void SetSavingThrowProficiency(AbilityScore ability, bool hasProficiency)
+    {
+        var abilityData = _abilities.FirstOrDefault(a => a.Ability == ability);
+        abilityData?.SetSavingThrowProficiency(hasProficiency);
+    }
+    
     private static List<Skill> GetRelatedSkills(AbilityScore ability)
     {
         return ability switch
@@ -130,5 +144,7 @@ public record AbilityInfo(
     AbilityScore AbilityScore,
     int AbilityValue,
     int AbilityModifier,
+    bool HasSavingThrowProficiency,
+    int SavingThrowModifier,
     List<SkillInfo> Skills
 );

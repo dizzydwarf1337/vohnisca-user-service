@@ -6,5 +6,5 @@ public enum Skill
     Deception, History, Insight, Intimidation,
     Investigation, Medicine, Nature, Perception,
     Performance, Persuasion, Religion, SleightOfHand,
-    Stealth, Survival, SavingThrow
+    Stealth, Survival 
 }

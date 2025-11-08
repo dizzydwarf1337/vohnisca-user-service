@@ -71,6 +71,8 @@ public class Character
     public List<string> AlliesAndOrganizations { get; set; } = new();
     public List<string> Enemies { get; set; } = new();
     
+    public List<CharacterAction> AvailableActions { get; set; } = new();
+    
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     

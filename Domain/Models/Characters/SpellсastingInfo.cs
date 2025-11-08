@@ -23,12 +23,13 @@ public class SpellcastingInfo
     
     public int KnownCantrips { get; set; }
     
+    public bool CanCastRituals { get; set; }
+    
     
     public int GetAvailableSlots(int level)
     {
-        if (!TotalSlots.ContainsKey(level)) return 0;
-        var total = TotalSlots[level];
-        var used = UsedSlots.ContainsKey(level) ? UsedSlots[level] : 0;
+        if (!TotalSlots.TryGetValue(level, out var total)) return 0;
+        var used = UsedSlots.TryGetValue(level, out var slot) ? slot : 0;
         return total - used;
     }
     
@@ -36,8 +37,7 @@ public class SpellcastingInfo
     {
         if (GetAvailableSlots(level) <= 0) return false;
         
-        if (!UsedSlots.ContainsKey(level))
-            UsedSlots[level] = 0;
+        UsedSlots.TryAdd(level, 0);
         
         UsedSlots[level]++;
         return true;
