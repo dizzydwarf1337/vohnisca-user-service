@@ -13,5 +13,28 @@ public class ResourcePool
     
     public int? DiceSize { get; set; }
     
-    public string? Formula { get; set; } 
+    public string? Formula { get; set; }
+    
+    
+    public bool Use(int amount = 1)
+    {
+        if (CurrentAmount < amount) return false;
+        CurrentAmount -= amount;
+        return true;
+    }
+    
+    public void Restore(int amount)
+    {
+        CurrentAmount = Math.Min(CurrentAmount + amount, MaxAmount);
+    }
+    
+    public void FullRestore()
+    {
+        CurrentAmount = MaxAmount;
+    }
+    
+    public bool IsAvailable(int amount = 1)
+    {
+        return CurrentAmount >= amount;
+    }
 }

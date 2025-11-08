@@ -18,7 +18,7 @@ public class Character
     public Size Size { get; set; }
     public int Age { get; set; }
     public int Height { get; set; } 
-    public int Weight { get; set; }
+    public int Weight { get; set; } 
     public string Eyes { get; set; }
     public string Skin { get; set; }
     public string Hair { get; set; }
@@ -26,14 +26,14 @@ public class Character
     
     public List<CharacterClass> Classes { get; set; } = new();
     
-    public CharacterStats Stats { get; set; }
+    public CharacterStats Stats { get; set; } = new();
     
     public int MaxHitPoints { get; set; }
     public int CurrentHitPoints { get; set; }
     public int TemporaryHitPoints { get; set; }
     
-    public int ArmorClass { get; set; } 
-    public int Speed { get; set; } 
+    public int ArmorClass { get; set; }
+    public int Speed { get; set; }
     public Dictionary<string, int> SpecialSpeeds { get; set; } = new();
     
     public Dictionary<int, int> HitDice { get; set; } = new();
@@ -44,12 +44,11 @@ public class Character
     
     public bool HasInspiration { get; set; }
     
-    public Dictionary<Guid, SpellсastingInfo> SpellcastingByClass { get; set; } = new();
-    
+    public Dictionary<Guid, SpellcastingInfo> SpellcastingByClass { get; set; } = new();
+
     public List<Item> Inventory { get; set; } = new();
     public EquipmentSlots Equipment { get; set; } = new();
     public Currency Money { get; set; } = new();
-    public int CarryingCapacity { get; set; } 
     
     public List<DamageType> DamageResistances { get; set; } = new();
     public List<DamageType> DamageImmunities { get; set; } = new();
@@ -60,11 +59,8 @@ public class Character
     public int ExhaustionLevel { get; set; }
     
     public Dictionary<ResourceType, ResourcePool> ClassResources { get; set; } = new();
-
-    public List<Guid> SelectedFeatIds { get; set; } = new();
     
-
-    public Dictionary<string, int> Senses { get; set; } = new();
+    public List<Guid> SelectedFeatIds { get; set; } = new();
     
     public string PersonalityTraits { get; set; }
     public string Ideals { get; set; }
@@ -75,12 +71,37 @@ public class Character
     public List<string> AlliesAndOrganizations { get; set; } = new();
     public List<string> Enemies { get; set; } = new();
     
-    public List<string> Languages { get; set; } = new();
-    
-    public List<string> ToolProficiencies { get; set; } = new();
-    public List<WeaponProperty> WeaponProficiencies { get; set; } = new();
-    public List<ArmorType> ArmorProficiencies { get; set; } = new();
-    
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    
+    
+    public int GetTotalLevel()
+    {
+        return Classes.Sum(c => c.Level);
+    }
+
+    public int GetCarryingCapacity()
+    {
+        return Stats.GetCarryingCapacity();
+    }
+    
+    public int GetInitiative()
+    {
+        return Stats.GetInitiative();
+    }
+
+    public int GetPassivePerception()
+    {
+        return Stats.GetPassivePerception();
+    }
+    
+    public double GetCurrentWeight()
+    {
+        return Inventory.Sum(i => i.Weight * i.Quantity);
+    }
+    
+    public bool IsEncumbered()
+    {
+        return GetCurrentWeight() > GetCarryingCapacity();
+    }
 }
