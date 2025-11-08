@@ -44,7 +44,7 @@ public class Character
     
     public bool HasInspiration { get; set; }
     
-    public Dictionary<Guid, SpellCastingInfo> SpellcastingByClass { get; set; } = new();
+    public Dictionary<Guid, SpellсastingInfo> SpellcastingByClass { get; set; } = new();
     
     public List<Item> Inventory { get; set; } = new();
     public EquipmentSlots Equipment { get; set; } = new();

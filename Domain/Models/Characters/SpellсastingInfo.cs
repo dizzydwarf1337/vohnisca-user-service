@@ -2,7 +2,7 @@ using Domain.Models.Characters.Enums;
 
 namespace Domain.Models.Characters;
 
-public class SpellCastingInfo
+public class SpellсastingInfo
 {
     public Guid ClassDefinitionId { get; set; } 
     public SpellcastingType Type { get; set; } 

@@ -9,11 +9,14 @@ public class Subclass
     public Guid ParentClassId { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
+    public string Source { get; set; }
     public string IconUrl { get; set; }
     
     public List<ArmorType>? BonusArmorProficiencies { get; set; }
     public List<WeaponProperty>? BonusWeaponProficiencies { get; set; }
-    public List<ClassLevelProgression> LevelProgressions { get; set; }
+    public List<string>? BonusToolProficiencies { get; set; }
+    
+    public List<ClassLevelProgression> LevelProgressions { get; set; } = new();
     
     public Dictionary<int, List<Guid>>? BonusSpellsByLevel { get; set; }
 }

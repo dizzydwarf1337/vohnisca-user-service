@@ -4,18 +4,15 @@ namespace Domain.Models.Characters;
 
 public class EquipmentSlots
 {
-    public int? MinLevel { get; set; }
+    public Guid? MainHandWeaponId { get; set; }
+    public Guid? OffHandWeaponId { get; set; }
     
-    public Dictionary<AbilityScore, int>? MinAbilityScores { get; set; }
+    public Guid? ArmorId { get; set; }
+    public Guid? ShieldId { get; set; }
     
-    public List<WeaponProperty>? RequiredWeaponProficiencies { get; set; }
-    public List<ArmorType>? RequiredArmorProficiencies { get; set; }
+    public Dictionary<string, Guid> AccessorySlots { get; set; } = new();
     
-    public List<Guid>? RequiredFeatIds { get; set; }
+    public List<Guid> AttunedItemIds { get; set; } = new();
     
-    public List<Guid>? RequiredFeatureIds { get; set; }
-    
-    public bool RequiresSpellcasting { get; set; }
-    
-    public List<Guid>? RequiredRaceIds { get; set; }
+    public int MaxAttunedItems { get; set; } = 3;
 }
