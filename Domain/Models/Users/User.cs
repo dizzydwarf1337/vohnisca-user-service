@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Domain.Models.Users.Enums;
 using LanguageExt;
 using LanguageExt.Common;
 
@@ -9,7 +10,7 @@ public class User
 {
     protected User() { }
     
-    [Key] public Guid Id { get; private set; }
+    [Key] public Guid Id { get; private set; } = Guid.NewGuid();
 
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
     
@@ -25,10 +26,7 @@ public class User
     
     public virtual ICollection<User> Friends { get; set; } = new List<User>();
     
-    public Guid UserSettingsId { get; init; } 
-    
-    [ForeignKey(nameof(UserSettingsId))]
-    public virtual UserSettings UserSettings { get; init; } 
+    public UserSettings UserSettings { get; init; } 
 
     public static Either<Error, User> Create(string userName, string email, string bio)
     {
@@ -36,17 +34,16 @@ public class User
         if (string.IsNullOrWhiteSpace(email)) return Error.New("Invalid email");
         if (string.IsNullOrWhiteSpace(bio)) return Error.New("Invalid bio");
 
-        var userId = Guid.NewGuid();
-
-        return UserSettings.Create(userId).Map(x => new User
+        return new User
         {
-            Id = userId,
             UserName = userName.Trim(),
             Email = email.Trim(),
             Bio = bio.Trim(),
-            UserSettingsId = x.Id,
-            UserSettings = x
-        });
+            UserSettings = new UserSettings()
+            {
+                Status = UserStatus.RequiredActivate
+            }
+        };
     }
 
     public Either<Error, User> UpdateEmail(string newEmail)
@@ -82,7 +79,7 @@ public class User
         
         Friends.Add(user);
         if (!user.Friends.Contains(this))
-            user.AddFriend(this);
+            user.Friends.Add(this);
         
         return this;
     }
@@ -94,7 +91,7 @@ public class User
         
         Friends.Remove(user);
         if (user.Friends.Contains(this))
-            user.RemoveFriend(this);
+            user.Friends.Remove(this);
         
         return this;
     }
@@ -102,6 +99,39 @@ public class User
     public Either<Error, User> Seen()
     {
         LastSeenAt = DateTime.UtcNow;
+        return this;
+    }
+    public Either<Error, User> Activate()
+    {
+        if (UserSettings.Status == UserStatus.Activated)
+            return Error.New("User already active");
+        
+        UserSettings.Status = UserStatus.Activated;
+        UserSettings.ActivatedAt = DateTime.UtcNow;
+        UserSettings.BlockedAt = null;
+        UserSettings.DeletedAt = null;
+        return this;
+    }
+
+    public Either<Error, User> Block()
+    {
+        if (UserSettings.Status == UserStatus.Blocked)
+            return Error.New("User already blocked");
+        UserSettings.Status = UserStatus.Blocked;
+        UserSettings.BlockedAt = DateTime.UtcNow;
+        UserSettings.ActivatedAt = null;
+        UserSettings.DeletedAt = null;
+        return this;
+    }
+
+    public Either<Error, User> Delete()
+    {
+        if (UserSettings.Status == UserStatus.Deleted)
+            return Error.New("User already deleted");
+        UserSettings.Status = UserStatus.Deleted;
+        UserSettings.DeletedAt = DateTime.UtcNow;
+        UserSettings.BlockedAt = null;
+        UserSettings.ActivatedAt = null;
         return this;
     }
 }

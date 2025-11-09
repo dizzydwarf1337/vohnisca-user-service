@@ -1,4 +1,5 @@
 using Domain.Models.Characters;
+using Domain.Models.Characters.Items;
 using Domain.Models.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,7 @@ public class VohniscaDbContext : DbContext
     public DbSet<Feature> Features { get; set; }
     public DbSet<Class> Classes { get; set; }
     public DbSet<Race> Races { get; set; }
+    public DbSet<Background> Backgrounds { get; set; }
     public DbSet<Spell> Spells { get; set; }
-    
+    public DbSet<Item> Items { get; set; }
 }

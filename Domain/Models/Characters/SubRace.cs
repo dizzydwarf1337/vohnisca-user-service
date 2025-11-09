@@ -20,6 +20,6 @@ public class SubRace
     public List<ToolProficiency> BonusToolProficiencies { get; set; } = new();
     
     public Dictionary<SenseType, int> BonusSenses { get; set; } = new();
-    
-    public ICollection<Feature> SubracialFeatures { get; set; }
+
+    public ICollection<Feature> SubracialFeatures { get; set; } = new List<Feature>();
 }

@@ -13,6 +13,8 @@ public class CharacterSkill
         Proficiency = proficiency;
     }
     
+    private CharacterSkill() { }
+    
     public int GetModifier(int abilityModifier, int proficiencyBonus)
     {
         int profBonus = Proficiency switch

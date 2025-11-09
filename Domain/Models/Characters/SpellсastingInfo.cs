@@ -16,13 +16,13 @@ public class SpellcastingInfo
     public Dictionary<int, int> TotalSlots { get; set; } = new();
     public Dictionary<int, int> UsedSlots { get; set; } = new();
     
-    public List<Guid> KnownSpellIds { get; set; } = new();
+    public List<Spell> KnownSpells { get; set; } = new();
     
-    public List<Guid> PreparedSpellIds { get; set; } = new();
+    public List<Spell> PreparedSpells { get; set; } = new();
     
     public int MaxPreparedSpells { get; set; }
-    
-    public virtual ICollection<Spell> AlwaysPreparedSpells { get; set; }
+
+    public ICollection<Spell> AlwaysPreparedSpells { get; set; } = new HashSet<Spell>();
     
     public int KnownCantrips { get; set; }
     
@@ -51,15 +51,15 @@ public class SpellcastingInfo
         UsedSlots.Clear();
     }
     
-    public bool PrepareSpell(Guid spellId)
+    public bool PrepareSpell(Spell spell)
     {
-        if (PreparedSpellIds.Contains(spellId)) return false;
-        PreparedSpellIds.Add(spellId);
+        if (PreparedSpells.Any(x => x.Id == spell.Id)) return false;
+        PreparedSpells.Add(spell);
         return true;
     }
     
-    public bool UnprepareSpell(Guid spellId)
+    public bool UnprepareSpell(Spell spell)
     {
-        return PreparedSpellIds.Remove(spellId);
+        return PreparedSpells.Remove(spell);
     }
 }

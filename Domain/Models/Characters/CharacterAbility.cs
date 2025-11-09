@@ -11,9 +11,7 @@ public class CharacterAbility
     
     public bool HasSavingThrowProficiency { get; private set; }
 
-    public IReadOnlyList<CharacterSkill> Skills => _skills.AsReadOnly();
-
-    private readonly List<CharacterSkill> _skills = new();
+    public List<CharacterSkill> Skills = new();
 
     public CharacterAbility(AbilityScore ability, int abilityValue, bool hasSavingThrowProficiency = false)
     {
@@ -22,6 +20,8 @@ public class CharacterAbility
         HasSavingThrowProficiency = hasSavingThrowProficiency;
     }
 
+    private CharacterAbility() { }
+    
     public void UpdateValue(int newValue)
     {
         AbilityValue = newValue;
@@ -39,6 +39,6 @@ public class CharacterAbility
 
     internal void AddSkill(CharacterSkill skill)
     {
-        _skills.Add(skill);
+        Skills.Add(skill);
     }
 }

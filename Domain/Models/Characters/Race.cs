@@ -14,9 +14,9 @@ public class Race
     public List<Language> Languages { get; set; } = new();
     
     public Dictionary<AbilityScore, int> AbilityScoreIncreases { get; set; } = new();
-    
-    public virtual ICollection<Feature> RacialFeatures { get; set; }
-    
+
+    public ICollection<Feature> RacialFeatures { get; set; } = new HashSet<Feature>();
+
     public Dictionary<SenseType, int> Senses { get; set; } = new();
     
     public List<SubRace> SubRaces { get; set; } = new();

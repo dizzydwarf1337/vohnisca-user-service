@@ -11,11 +11,9 @@ public class FeatureRequirements
     public List<WeaponProperty>? RequiredWeaponProficiencies { get; set; }
     public List<ArmorType>? RequiredArmorProficiencies { get; set; }
     
-    public List<Guid>? RequiredFeatIds { get; set; }
-    
-    public List<Guid>? RequiredFeatureIds { get; set; }
+    public ICollection<Feature>? RequiredFeatures { get; set; }
     
     public bool RequiresSpellcasting { get; set; }
     
-    public List<Guid>? RequiredRaceIds { get; set; }
+    public ICollection<Race>? RequiredRaces { get; set; }
 }

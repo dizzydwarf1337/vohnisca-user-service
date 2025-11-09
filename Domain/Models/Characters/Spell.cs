@@ -22,6 +22,6 @@ public class Spell
     public string AtHigherLevels { get; set; }
     public bool IsRitual { get; set; }
     public bool IsConcentration { get; set; }
-    
-    public virtual ICollection<Class> AvailableForClasses { get; set; }
+
+    public virtual ICollection<Class> AvailableForClasses { get; set; } = new List<Class>();
 }
