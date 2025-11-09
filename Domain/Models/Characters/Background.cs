@@ -19,7 +19,8 @@ public class Background
     
     public Currency StartingMoney { get; set; } = new();
     
-    public virtual Feature? BackgroundFeatureId { get; set; } 
+    public Guid? BackgroundFeatureId { get; set; }
+    public virtual Feature? BackgroundFeature { get; set; } 
     public virtual ICollection<Item> StartingEquipment { get; set; }
     public virtual ICollection<Character> Characters { get; set; }
 }

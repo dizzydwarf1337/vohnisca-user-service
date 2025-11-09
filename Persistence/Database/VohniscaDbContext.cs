@@ -12,8 +12,7 @@ public class VohniscaDbContext : DbContext
     public DbSet<Character> Characters { get; set; }
     public DbSet<Feature> Features { get; set; }
     public DbSet<Class> Classes { get; set; }
-    public DbSet<Subclass> Subclasses { get; set; }
     public DbSet<Race> Races { get; set; }
-    public DbSet<SubRace> SubRaces { get; set; }
+    public DbSet<Spell> Spells { get; set; }
     
 }

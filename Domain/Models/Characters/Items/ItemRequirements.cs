@@ -13,7 +13,7 @@ public class ItemRequirements
     
     public bool RequiresSpellcasting { get; set; }
     
-    public virtual ICollection<Race>? RequiredRaceIds { get; set; }
-    public virtual ICollection<Class>? RequiredClassIds { get; set; }
-    public virtual ICollection<Feature>? RequiredFeatureId { get; set; }
+    public virtual ICollection<Race>? RequiredRaces { get; set; }
+    public virtual ICollection<Class>? RequiredClasses { get; set; }
+    public virtual ICollection<Feature>? RequiredFeatures { get; set; }
 }
