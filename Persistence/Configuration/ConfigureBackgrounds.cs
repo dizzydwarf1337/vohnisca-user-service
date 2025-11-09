@@ -1,7 +1,6 @@
 using System.Text.Json;
 using Domain.Models.Characters;
 using Domain.Models.Characters.Enums;
-using Domain.Models.Characters.Items;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -12,101 +11,66 @@ public class ConfigureBackgrounds : IEntityTypeConfiguration<Background>
     public void Configure(EntityTypeBuilder<Background> builder)
     {
         var jsonOptions = new JsonSerializerOptions
-{
-    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-    WriteIndented = false
-};
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = false
+        };
 
-builder.Property(b => b.SkillProficiencies)
-       .HasConversion(
-           v => JsonSerializer.Serialize(v, jsonOptions),
-           v => JsonSerializer.Deserialize<List<Skill>>(v, jsonOptions) ?? new List<Skill>()
-       );
+        builder.HasKey(b => b.Id);
 
-builder.Property(b => b.ToolProficiencies)
-       .HasConversion(
-           v => JsonSerializer.Serialize(v, jsonOptions),
-           v => JsonSerializer.Deserialize<List<ToolProficiency>>(v, jsonOptions) ?? new List<ToolProficiency>()
-       );
+        builder.Property(b => b.Name)
+               .IsRequired()
+               .HasMaxLength(100);
 
-builder.Property(b => b.GrantedLanguages)
-       .HasConversion(
-           v => JsonSerializer.Serialize(v, jsonOptions),
-           v => JsonSerializer.Deserialize<List<Language>>(v, jsonOptions) ?? new List<Language>()
-       );
+        builder.Property(b => b.Description)
+               .HasMaxLength(2000);
 
-builder.Property(b => b.StartingEquipment)
-       .HasConversion(
-           v => JsonSerializer.Serialize(v, jsonOptions),
-           v => JsonSerializer.Deserialize<List<Item>>(v, jsonOptions) ?? new List<Item>()
-       );
+        builder.Property(b => b.Source)
+               .HasMaxLength(100);
 
-builder.OwnsOne(b => b.BackgroundFeature, bf =>
-{
-    bf.Property(f => f.Effects)
-      .HasConversion(
-          v => JsonSerializer.Serialize(v, jsonOptions),
-          v => JsonSerializer.Deserialize<List<FeatureEffect>>(v, jsonOptions) ?? new List<FeatureEffect>()
-      );
+        builder.Property(b => b.AvailableLanguages);
 
-    bf.Property(f => f.AllowedAbilitiesForHalfASI)
-      .HasConversion(
-          v => JsonSerializer.Serialize(v, jsonOptions),
-          v => JsonSerializer.Deserialize<List<AbilityScore>>(v, jsonOptions) ?? new List<AbilityScore>()
-      );
+        builder.Property(b => b.SkillProficiencies)
+               .HasColumnType("jsonb")
+               .HasConversion(
+                   v => JsonSerializer.Serialize(v, jsonOptions),
+                   v => JsonSerializer.Deserialize<List<Skill>>(v, jsonOptions) ?? new List<Skill>()
+               );
 
-    bf.Property(f => f.AbilityIncreases)
-      .HasConversion(
-          v => JsonSerializer.Serialize(v, jsonOptions),
-          v => JsonSerializer.Deserialize<Dictionary<AbilityScore, int>>(v, jsonOptions) ?? new Dictionary<AbilityScore, int>()
-      );
+        builder.Property(b => b.ToolProficiencies)
+               .HasColumnType("jsonb")
+               .HasConversion(
+                   v => JsonSerializer.Serialize(v, jsonOptions),
+                   v => JsonSerializer.Deserialize<List<ToolProficiency>>(v, jsonOptions) ?? new List<ToolProficiency>()
+               );
 
-    bf.OwnsOne(f => f.Usage, fu =>
-    {
-        fu.Property(u => u.Type);
-        fu.Property(u => u.MaxUsesFormula);
-        fu.Property(u => u.CurrentUses);
-        fu.Property(u => u.RechargeCondition);
-    });
+        builder.Property(b => b.GrantedLanguages)
+               .HasColumnType("jsonb")
+               .HasConversion(
+                   v => JsonSerializer.Serialize(v, jsonOptions),
+                   v => JsonSerializer.Deserialize<List<Language>>(v, jsonOptions) ?? new List<Language>()
+               );
 
-    bf.OwnsOne(f => f.Requirements, fr =>
-    {
-        fr.Property(r => r.MinAbilityScores)
-          .HasConversion(
-              v => JsonSerializer.Serialize(v, jsonOptions),
-              v => JsonSerializer.Deserialize<Dictionary<AbilityScore, int>>(v, jsonOptions) ?? new Dictionary<AbilityScore, int>()
-          );
+        builder.OwnsOne(b => b.StartingMoney, money =>
+        {
+            money.Property(m => m.Copper);
+            money.Property(m => m.Silver);
+            money.Property(m => m.Electrum);
+            money.Property(m => m.Gold);
+            money.Property(m => m.Platinum);
+        });
 
-        fr.Property(r => r.RequiredWeaponProficiencies)
-          .HasConversion(
-              v => JsonSerializer.Serialize(v, jsonOptions),
-              v => JsonSerializer.Deserialize<List<WeaponProperty>>(v, jsonOptions) ?? new List<WeaponProperty>()
-          );
+        builder.HasOne(b => b.BackgroundFeature)
+               .WithMany()
+               .HasForeignKey(b => b.BackgroundFeatureId)
+               .OnDelete(DeleteBehavior.Restrict);
 
-        fr.Property(r => r.RequiredArmorProficiencies)
-          .HasConversion(
-              v => JsonSerializer.Serialize(v, jsonOptions),
-              v => JsonSerializer.Deserialize<List<ArmorType>>(v, jsonOptions) ?? new List<ArmorType>()
-          );
+        builder.HasMany(b => b.StartingEquipment)
+               .WithMany(i => i.Backgrounds);
 
-        fr.Property(r => r.RequiredRaces)
-          .HasConversion(
-              v => JsonSerializer.Serialize(v.Select(x => x.Id).ToList(), jsonOptions),
-              v => JsonSerializer.Deserialize<List<Guid>>(v, jsonOptions)!.Select(id => new Race { Id = id }).ToList()
-          );
-
-        fr.Property(r => r.RequiredFeatures)
-          .HasConversion(
-              v => JsonSerializer.Serialize(v.Select(x => x.Id).ToList(), jsonOptions),
-              v => JsonSerializer.Deserialize<List<Feature>>(v, jsonOptions)!
-          );
-
-        fr.Property(r => r.RequiredFeatures)
-          .HasConversion(
-              v => JsonSerializer.Serialize(v.Select(x => x.Id).ToList(), jsonOptions),
-              v => JsonSerializer.Deserialize<List<Guid>>(v, jsonOptions)!.Select(id => new Feature { Id = id }).ToList()
-          );
-    });
-});
+        builder.HasMany(b => b.Characters)
+               .WithOne(c => c.Background)
+               .HasForeignKey(c => c.BackgroundId)
+               .OnDelete(DeleteBehavior.Restrict);
     }
 }
