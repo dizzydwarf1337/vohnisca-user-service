@@ -11,12 +11,9 @@ public class ItemRequirements
     public List<WeaponProperty>? RequiredWeaponProficiencies { get; set; }
     public List<ArmorType>? RequiredArmorProficiencies { get; set; }
     
-    public List<Guid>? RequiredFeatIds { get; set; }
-    
-    public List<Guid>? RequiredFeatureIds { get; set; }
-    
     public bool RequiresSpellcasting { get; set; }
     
-    public List<Guid>? RequiredRaceIds { get; set; }
-    public List<Guid>? RequiredClassIds { get; set; }
+    public virtual ICollection<Race>? RequiredRaceIds { get; set; }
+    public virtual ICollection<Class>? RequiredClassIds { get; set; }
+    public virtual ICollection<Feature>? RequiredFeatureId { get; set; }
 }

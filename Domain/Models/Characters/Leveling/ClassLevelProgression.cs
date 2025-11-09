@@ -6,9 +6,9 @@ public class ClassLevelProgression
     
     public List<ResourceProgression> ResourceProgressions { get; set; }
     
-    public List<Guid> FeatureIds { get; set; }
-    
     public List<FeatureChoiceProgression> FeatureChoices { get; set; }
     
     public bool GrantsASI { get; set; }
+    
+    public virtual ICollection<Feature> Features { get; set; }
 }

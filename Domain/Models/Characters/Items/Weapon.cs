@@ -7,7 +7,7 @@ public class Weapon : Item
     public DiceType DamageDice { get; set; }
     public int DamageDiceCount { get; set; } = 1;
     public DamageType DamageType { get; set; }
-    public List<WeaponProperty> Properties { get; set; }
+    public List<WeaponProperty> WeaponProperties { get; set; }
     public int RangeNormal { get; set; }
     public int RangeLong { get; set; }
     public DiceType? VersatileDiceType { get; set; }

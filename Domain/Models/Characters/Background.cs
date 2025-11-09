@@ -17,10 +17,9 @@ public class Background
     public int AvailableLanguages { get; set; }
     public List<Language> GrantedLanguages { get; set; } = new(); 
     
-    public List<Item> StartingEquipment { get; set; } = new();
     public Currency StartingMoney { get; set; } = new();
     
-    public Guid? BackgroundFeatureId { get; set; } 
-    
+    public virtual Feature? BackgroundFeatureId { get; set; } 
+    public virtual ICollection<Item> StartingEquipment { get; set; }
     public virtual ICollection<Character> Characters { get; set; }
 }

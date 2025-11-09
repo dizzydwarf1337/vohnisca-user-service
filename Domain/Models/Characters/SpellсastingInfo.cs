@@ -4,7 +4,8 @@ namespace Domain.Models.Characters;
 
 public class SpellcastingInfo
 {
-    public Guid ClassDefinitionId { get; set; }
+    public Guid ClassId { get; set; }
+    public virtual Class Class { get; set; }
     
     public SpellcastingType Type { get; set; }
     public AbilityScore SpellcastingAbility { get; set; }
@@ -21,7 +22,7 @@ public class SpellcastingInfo
     
     public int MaxPreparedSpells { get; set; }
     
-    public List<Guid> AlwaysPreparedSpellIds { get; set; } = new();
+    public virtual ICollection<Spell> AlwaysPreparedSpells { get; set; }
     
     public int KnownCantrips { get; set; }
     

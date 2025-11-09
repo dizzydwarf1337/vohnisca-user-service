@@ -15,8 +15,12 @@ public class Character
     public string Name { get; set; }
     
     public Guid RaceId { get; set; }
+    public virtual Race  Race { get; set; }
     public Guid? SubRaceId { get; set; }
+    public virtual SubRace? SubRace { get; set; }
     public Guid BackgroundId { get; set; }
+    public virtual Background Background { get; set; }
+    
     public Guid? ConcentratingOnSpellId { get; set; }
     
     public Alignment Alignment { get; set; }
@@ -53,7 +57,7 @@ public class Character
     
     public Dictionary<Guid, SpellcastingInfo> SpellcastingByClass { get; set; } = new();
 
-    public List<Item> Inventory { get; set; } = new();
+    public List<CharacterItem> Inventory { get; set; } = new();
     public EquipmentSlots Equipment { get; set; } = new();
     public Currency Money { get; set; } = new();
     
@@ -79,7 +83,7 @@ public class Character
     
     public List<CharacterAction> AvailableActions { get; set; } = new();
     
-    public virtual ICollection<Feature> SelectedFeatIds { get; set; }
+    public virtual ICollection<Feature> SelectedFeatures { get; set; }
     public virtual User User { get; set; }
     
     public int GetTotalLevel()
@@ -104,7 +108,7 @@ public class Character
     
     public double GetCurrentWeight()
     {
-        return Inventory.Sum(i => i.Weight * i.Quantity);
+        return Inventory.Sum(i => i.Item.Weight * i.Quantity);
     }
     
     public bool IsEncumbered()
