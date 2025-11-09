@@ -26,4 +26,7 @@ public class Feature
     public Dictionary<AbilityScore, int>? AbilityIncreases { get; set; }
     
     public bool IsSelectableAsFeat { get; set; }
+    
+    public virtual ICollection<Character> Characters { get; set; } = new List<Character>();
+    public virtual ICollection<Race> Races { get; set; } = new List<Race>();
 }

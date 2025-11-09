@@ -13,4 +13,6 @@ public class Item
     public ItemRarity Rarity { get; set; }
     public List<ItemProperty> Properties { get; set; } = new();
     public ItemRequirements? Requirements { get; set; }
+    
+    public virtual ICollection<Background> Backgrounds { get; set; } = new List<Background>();
 }

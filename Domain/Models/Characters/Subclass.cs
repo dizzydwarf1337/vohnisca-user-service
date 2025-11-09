@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Models.Characters.Enums;
 using Domain.Models.Characters.Leveling;
 

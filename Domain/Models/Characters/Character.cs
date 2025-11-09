@@ -42,7 +42,7 @@ public class Character
     
     public List<CharacterAction> AvailableActions { get; set; } = new();
 
-    public ICollection<Feature> SelectedFeatures { get; set; } = new List<Feature>();
+    public virtual ICollection<Feature> SelectedFeatures { get; set; } = new List<Feature>();
     public virtual User User { get; set; }
     
     public int GetTotalLevel()

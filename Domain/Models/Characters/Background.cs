@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Models.Characters.Enums;
 using Domain.Models.Characters.Items;
 
@@ -19,7 +20,10 @@ public class Background
     
     public Currency StartingMoney { get; set; } = new();
     
-    public Feature BackgroundFeature { get; set; } = new();
-    public ICollection<Item> StartingEquipment { get; set; } = new List<Item>();
+    public Guid BackgroundFeatureId { get; set; }
+    
+    [ForeignKey(nameof(BackgroundFeatureId))]
+    public virtual Feature BackgroundFeature { get; set; } = new();
+    public virtual ICollection<Item> StartingEquipment { get; set; } = new List<Item>();
     public virtual ICollection<Character> Characters { get; set; } = new List<Character>();
 }

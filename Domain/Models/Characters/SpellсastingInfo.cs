@@ -16,9 +16,9 @@ public class SpellcastingInfo
     public Dictionary<int, int> TotalSlots { get; set; } = new();
     public Dictionary<int, int> UsedSlots { get; set; } = new();
     
-    public List<Spell> KnownSpells { get; set; } = new();
+    public virtual List<Spell> KnownSpells { get; set; } = new();
     
-    public List<Spell> PreparedSpells { get; set; } = new();
+    public virtual List<Spell> PreparedSpells { get; set; } = new();
     
     public int MaxPreparedSpells { get; set; }
 
