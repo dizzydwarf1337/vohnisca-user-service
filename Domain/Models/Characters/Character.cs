@@ -1,5 +1,6 @@
 using Domain.Models.Characters.Enums;
 using Domain.Models.Characters.Items;
+using Domain.Models.Users;
 
 namespace Domain.Models.Characters;
 
@@ -7,6 +8,10 @@ public class Character
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }
+        
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    
     public string Name { get; set; }
     
     public Guid RaceId { get; set; }
@@ -62,7 +67,6 @@ public class Character
     
     public Dictionary<ResourceType, ResourcePool> ClassResources { get; set; } = new();
     
-    public List<Guid> SelectedFeatIds { get; set; } = new();
     
     public string PersonalityTraits { get; set; }
     public string Ideals { get; set; }
@@ -75,9 +79,8 @@ public class Character
     
     public List<CharacterAction> AvailableActions { get; set; } = new();
     
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-    
+    public virtual ICollection<Feature> SelectedFeatIds { get; set; }
+    public virtual User User { get; set; }
     
     public int GetTotalLevel()
     {

@@ -25,11 +25,3 @@ public class CharacterAction
     public UsageType UsageType { get; set; }
     public int? UsesRemaining { get; set; }
 }
-
-public enum ActionSource
-{
-    Weapon,
-    Spell,
-    Feature,
-    Item
-}

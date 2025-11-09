@@ -21,4 +21,6 @@ public class Background
     public Currency StartingMoney { get; set; } = new();
     
     public Guid? BackgroundFeatureId { get; set; } 
+    
+    public virtual ICollection<Character> Characters { get; set; }
 }

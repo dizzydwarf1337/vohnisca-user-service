@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Models.Characters.Enums;
 using Domain.Models.Characters.Leveling;
 
@@ -5,8 +7,10 @@ namespace Domain.Models.Characters;
 
 public class Subclass
 {
+    [Key]
     public Guid Id { get; set; }
-    public Guid ParentClassId { get; set; }
+    public Guid ClassId { get; set; }
+    
     public string Name { get; set; }
     public string Description { get; set; }
     public string Source { get; set; }
@@ -19,4 +23,7 @@ public class Subclass
     public List<ClassLevelProgression> LevelProgressions { get; set; } = new();
     
     public Dictionary<int, List<Guid>>? BonusSpellsByLevel { get; set; }
+    
+    [ForeignKey(nameof(ClassId))]
+    public virtual Class Class { get; set; }
 }

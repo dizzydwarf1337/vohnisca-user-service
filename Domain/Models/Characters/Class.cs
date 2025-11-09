@@ -28,7 +28,7 @@ public class Class
     public bool IsPreparedCaster { get; set; }
     
     public int SubclassLevel { get; set; }
-    public List<Subclass> Subclasses { get; set; } = new();
+
     
     public List<ClassLevelProgression> LevelProgressions { get; set; } = new();
     
@@ -38,4 +38,7 @@ public class Class
     public List<WeaponProperty>? MulticlassWeaponProficiencies { get; set; }
     public List<ToolProficiency>? MulticlassToolProficiencies { get; set; }
     public int? MulticlassSkillChoiceCount { get; set; }
+    
+    public virtual ICollection<Subclass> Subclasses { get; set; }
+    public virtual ICollection<Spell> AvailableSpells { get; set; }
 }
