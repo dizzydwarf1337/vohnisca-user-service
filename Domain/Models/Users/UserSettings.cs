@@ -1,8 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Models.Users.Enums;
-using LanguageExt;
-using LanguageExt.Common;
 
 namespace Domain.Models.Users;
 

@@ -1,5 +1,5 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using Domain.Models.Chats;
+using Domain.Models.Notifications;
 using Domain.Models.Users.Enums;
 using LanguageExt;
 using LanguageExt.Common;
@@ -10,7 +10,7 @@ public class User
 {
     protected User() { }
     
-    [Key] public Guid Id { get; private set; } = Guid.NewGuid();
+    public Guid Id { get; private set; } = Guid.NewGuid();
 
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
     
@@ -25,21 +25,23 @@ public class User
     public string Bio { get; private set; }
     
     public virtual ICollection<User> Friends { get; set; } = new List<User>();
+    public virtual ICollection<Chat> Chats { get; set; } = new List<Chat>();
+    public virtual ICollection<Notification>  Notifications { get; set; } = new List<Notification>();
     
     public UserSettings UserSettings { get; init; } 
 
-    public static Either<Error, User> Create(string userName, string email, string bio)
+    public static Either<Error, User> Create(string userName, string email, string bio, Guid? userId = null)
     {
-        if (string.IsNullOrWhiteSpace(userName)) return Error.New("Invalid username");
-        if (string.IsNullOrWhiteSpace(email)) return Error.New("Invalid email");
-        if (string.IsNullOrWhiteSpace(bio)) return Error.New("Invalid bio");
+        if (string.IsNullOrWhiteSpace(userName)) return Error.New("Username is empty");
+        if (string.IsNullOrWhiteSpace(email)) return Error.New("Email is empty");
 
         return new User
         {
+            Id = userId ?? Guid.NewGuid(), 
             UserName = userName.Trim(),
             Email = email.Trim(),
             Bio = bio.Trim(),
-            UserSettings = new UserSettings()
+            UserSettings = new UserSettings
             {
                 Status = UserStatus.RequiredActivate
             }
@@ -50,7 +52,7 @@ public class User
     {
         if (Email.Equals(newEmail, StringComparison.OrdinalIgnoreCase))
             return Error.New("User already has this email");
-        if (!new EmailAddressAttribute().IsValid(newEmail))
+        if (string.IsNullOrWhiteSpace(newEmail) || !newEmail.Contains('@'))
             return Error.New("Invalid email format");
         
         Email =  newEmail.Trim();
@@ -62,8 +64,6 @@ public class User
     {
         if(string.IsNullOrEmpty(newUserName))
             return Error.New("Invalid user name");
-        if (string.IsNullOrEmpty(newBio))
-            return Error.New("Invalid bio");
         
         UserName = newUserName.Trim();
         Bio = newBio.Trim();
@@ -128,6 +128,9 @@ public class User
     {
         if (UserSettings.Status == UserStatus.Deleted)
             return Error.New("User already deleted");
+        UserName = "";
+        Email = "";
+        Bio = "";
         UserSettings.Status = UserStatus.Deleted;
         UserSettings.DeletedAt = DateTime.UtcNow;
         UserSettings.BlockedAt = null;

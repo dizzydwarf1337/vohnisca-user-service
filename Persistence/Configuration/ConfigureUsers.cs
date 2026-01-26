@@ -21,14 +21,14 @@ public class ConfigureUsers : IEntityTypeConfiguration<User>
         builder.Property(u => u.Bio)
             .HasMaxLength(500);
         
-        builder.OwnsOne(u => u.UserSettings, us =>
+        builder.ComplexProperty(u => u.UserSettings, us =>
         {
             us.Property(s => s.Status).IsRequired();
             us.Property(s => s.ActivatedAt);
             us.Property(s => s.BlockedAt);
             us.Property(s => s.DeletedAt);
         });
-        
+
         builder.HasMany(u => u.Friends)
             .WithMany()
             .UsingEntity<Dictionary<string, object>>(
@@ -37,5 +37,8 @@ public class ConfigureUsers : IEntityTypeConfiguration<User>
                 j => j.HasOne<User>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.Cascade),
                 j => j.HasKey("UserId", "FriendId")
             );
+        
+        builder.HasIndex(u => u.Email).IsUnique();
+        builder.HasIndex(u => u.UserName).IsUnique();
     } 
 }

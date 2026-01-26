@@ -1,18 +1,31 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>Application</RootNamespace>
+        <NoWarn>8618</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="EdjCase.JsonRpc.Client" Version="6.1.0" />
+      <PackageReference Include="FluentValidation" Version="12.1.1" />
       <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
+      <PackageReference Include="MassTransit.RabbitMQ" Version="8.5.6" />
+      <PackageReference Include="MediatR" Version="13.1.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
+      <PackageReference Include="Serilog" Version="4.3.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Interfaces\Repositories\" />
+      <Folder Include="Commands\Admin\" />
+      <Folder Include="Queries\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Domain\Domain.csproj" />
+      <ProjectReference Include="..\Persistence\Persistence.csproj" />
     </ItemGroup>
 
 </Project>
