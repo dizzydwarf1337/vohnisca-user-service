@@ -1,4 +1,4 @@
-using Domain.Interfaces.Repositories.Users;
+using Domain.Interfaces.Users;
 using Domain.Models.Users;
 using LanguageExt;
 using LanguageExt.Common;
@@ -13,18 +13,14 @@ public class UserRepository : IUserRepository
     public UserRepository(VohniscaDbContext context)
         => _context = context;
     
-    public Either<Error, IQueryable<User>> GetAllEntities()
+    public IQueryable<User> GetAllEntities()
     {
-        return Prelude.Right(_context.Users.AsQueryable());
+        return _context.Users.AsQueryable();
     }
 
-    public async Task<Either<Error, User>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Option<User>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-        if (user == null)
-            return Error.New("User not found");
-        
-        return user;
+        return await _context.Users.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
     public async Task<Either<Error, User>> SaveAsync(User entity, CancellationToken cancellationToken)

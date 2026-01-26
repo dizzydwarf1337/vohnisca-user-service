@@ -1,0 +1,47 @@
+﻿
+services:
+  postgres:
+    image: postgres:16
+    container_name: vohnisca-db
+    environment:
+      POSTGRES_USER: vohnisca_user
+      POSTGRES_PASSWORD: vohnisca_pass_2025
+      POSTGRES_DB: vohnisca_db
+    ports:
+      - "5433:5433"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vohnisca_user -d vohnisca_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - vohnisca-net
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vohnisca-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=vohnisca_db;Username=vohnisca_user;Password=vohnisca_pass_2025;Include Error Detail=true
+    ports:
+      - "5030:5030"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - vohnisca-net
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  vohnisca-net:
+    external: true
