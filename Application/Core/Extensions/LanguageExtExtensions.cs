@@ -38,4 +38,12 @@ public static class LanguageExtExtensions
 
         return eitherResult;
     }
+
+    public static T? Value<T>(this Option<T> option)
+    {
+        return option.Match(
+            Some: x => x,
+            None: () => default(T)
+        );
+    }
 }

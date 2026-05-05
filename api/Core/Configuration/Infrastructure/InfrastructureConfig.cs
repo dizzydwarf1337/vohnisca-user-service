@@ -35,11 +35,11 @@ public static class InfrastructureConfig
             cfg.RegisterServicesFromAssembly(typeof(CreateUserDataCommand).Assembly);
         });
 
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(AdminAuthorizationBehavior<,>));
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UserAuthorizationBehavior<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ExceptionBehavior<,>));
-
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UserAuthorizationBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(AdminAuthorizationBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        
         services.AddValidatorsFromAssembly(typeof(CreateUserDataCommandValidator).Assembly);
         
         services.AddLogging();

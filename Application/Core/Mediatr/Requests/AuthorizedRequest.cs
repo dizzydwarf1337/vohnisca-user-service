@@ -5,7 +5,7 @@ namespace Application.Core.Mediatr.Requests;
 public class AuthorizedRequest<T> : PublicRequest<T>
 {
     [JsonIgnore]
-    public AuthorizeData? AuthorizeData { get; set; } = default!;
+    public AuthorizeData AuthorizeData { get; set; } = default!;
 }
 
 public class AuthorizeData

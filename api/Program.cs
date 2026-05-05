@@ -1,3 +1,4 @@
+using api.Controllers;
 using api.Core.Configuration.Infrastructure;
 using api.Core.Configuration.Middleware;
 using api.Core.Extensions;
@@ -14,9 +15,8 @@ builder.Services
     .AddDatabase(builder.Configuration, builder.Environment)
     .AddRepositories()
     .AddApplicationServices()
-    .AddHttpRpcClients(builder.Configuration)
     .AddInfrastructure()
-    .AddAppServices()
+    .AddAppServices(builder.Configuration)
     .AddCorsPolicy();
 
 builder.Host
@@ -31,11 +31,11 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseRouting();
-
-app.UseJsonRpc();
+app.UseAuthentication();
+app.UseAuthorization(); 
+app.UseJsonRpcWithBaseController<BaseController>();
 
 app.UseCors("CorsPolicy");
 
-app.MapControllers();
 
 app.Run();

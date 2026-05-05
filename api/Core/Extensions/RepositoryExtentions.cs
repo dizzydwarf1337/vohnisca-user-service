@@ -19,6 +19,7 @@ public static class RepositoryExtensions
         services.AddScoped<IMessageAttachmentRepository, MessageAttachmentRepository>();
         services.AddScoped<IMessageReadStatusRepository, MessageReadStatusRepository>();
         services.AddScoped<INotificationRepository, NotificationRepository>();
+        services.AddScoped<IFriendRequestRepository, FriendRequestRepository>();
 
         return services;
     }

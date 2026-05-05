@@ -27,6 +27,10 @@ public class User
     public virtual ICollection<User> Friends { get; set; } = new List<User>();
     public virtual ICollection<Chat> Chats { get; set; } = new List<Chat>();
     public virtual ICollection<Notification>  Notifications { get; set; } = new List<Notification>();
+
+    public ICollection<FriendRequest> SentFriendRequests { get; set; } = new List<FriendRequest>();
+
+    public ICollection<FriendRequest> ReceivedFriendRequests { get; set; } = new List<FriendRequest>();
     
     public UserSettings UserSettings { get; init; } 
 

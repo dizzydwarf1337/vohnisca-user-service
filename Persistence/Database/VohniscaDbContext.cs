@@ -17,6 +17,8 @@ public class VohniscaDbContext : DbContext
     public DbSet<MessageReadStatus> MessageReadStatuses { get; set; }
     public DbSet<Notification> Notifications { get; set; }
     
+    public DbSet<FriendRequest> FriendRequests { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -27,5 +29,6 @@ public class VohniscaDbContext : DbContext
         modelBuilder.ApplyConfiguration(new ConfigureMessageAttachments());
         modelBuilder.ApplyConfiguration(new ConfigureMessageReadStatuses());
         modelBuilder.ApplyConfiguration(new ConfigureNotifications());
+        modelBuilder.ApplyConfiguration(new ConfigureFriendRequests());
     }
 }
