@@ -5,18 +5,21 @@ public class RpcResponse<T>
     public bool IsSuccess { get; set; }
     public T? Data { get; set; }
     public string? Error { get; set; }
+    public int StatusCode { get; set; } = 500;
 
     public static RpcResponse<T> Success(T data) =>
-        new ()
+        new()
         {
             IsSuccess = true,
-            Data = data
+            Data = data,
+            StatusCode = 200,
         };
 
-    public static RpcResponse<T> Failure(string? error) =>
-        new ()
+    public static RpcResponse<T> Failure(string? error, int statusCode = 500) =>
+        new()
         {
             IsSuccess = false,
-            Error = error
+            Error = error,
+            StatusCode = statusCode,
         };
-};
+}

@@ -26,7 +26,7 @@ public static class AppServices
             });
         services.AddJsonRpc(new RpcServerConfiguration()
         {
-            ShowServerExceptions = true,
+            ShowServerExceptions = false,
         });
         return services;
     }

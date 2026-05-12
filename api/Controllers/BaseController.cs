@@ -19,7 +19,7 @@ public class BaseController : RpcController
         var result = await _mediator.Send(command);
         return result.Match(
             Right: RpcResponse<T>.Success,
-            Left: error => RpcResponse<T>.Failure(error.Message)
+            Left: error => RpcResponse<T>.Failure(error.Message, error.Code)
         );
     } 
 }
