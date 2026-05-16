@@ -9,8 +9,8 @@ public class GetMeQuery : UserRequest<GetMeQuery.Result>
         string Email,
         string Bio,
         DateTime CreatedAt,
-        int UnreadNotificationsCount,
-        int UnreadMessagesCount,
+        bool HasUnreadNotifications,
+        bool HasUnreadMessages,
         int FriendsOnline
         );
 }

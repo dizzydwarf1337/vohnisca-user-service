@@ -27,8 +27,8 @@ public class GetMeQueryHandler : IRequestHandler<GetMeQuery, Either<Error, GetMe
             user.Email,
             user.Bio,
             user.CreatedAt,
-            user.Notifications.Count(x => !x.IsRead), 
-            user.Chats.Sum(c => c.Messages.Count(m => m.ReadStatuses.All(rs => rs.UserId != user.Id))),
+            user.Notifications.Any(x => !x.IsRead), 
+            user.Chats.Any(c => c.Messages.Any(m => m.ReadStatuses.All(rs => rs.UserId != user.Id))),
             user.Friends.Count(x => x.LastSeenAt > DateTime.UtcNow.AddMinutes(-5))
         );
     }
