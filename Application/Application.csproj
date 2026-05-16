@@ -20,6 +20,7 @@
 
     <ItemGroup>
       <Folder Include="Commands\Admin\" />
+      <Folder Include="Queries\User\FriendRequests\GetFriends\" />
     </ItemGroup>
 
     <ItemGroup>

@@ -12,13 +12,14 @@ namespace Application.Commands.User.FriendRequests.AcceptFriendRequest;
 public class AcceptFriendRequestCommandHandler : IRequestHandler<AcceptFriendRequestCommand, Either<Error, Unit>>
 {
     private readonly IFriendRequestRepository _friendRequestRepository;
-    
+
     public AcceptFriendRequestCommandHandler(IFriendRequestRepository friendRequestRepository)
         => _friendRequestRepository = friendRequestRepository;
-    
-    public async Task<Either<Error, Unit>> Handle(AcceptFriendRequestCommand request, CancellationToken cancellationToken)
+
+    public async Task<Either<Error, Unit>> Handle(AcceptFriendRequestCommand request,
+        CancellationToken cancellationToken)
     {
-        return await GetFriendRequest(request.Id, request.AuthorizeData!.UserId, cancellationToken)
+        return await GetFriendRequest(request.Id, request.AuthorizeData.UserId, cancellationToken)
             .BindAsync(fr => fr.Accept())
             .BindAsync(fr => _friendRequestRepository.UpdateAsync(fr, cancellationToken))
             .MapToUnitAsync();

@@ -4,7 +4,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api", "api\api.csproj", "{C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8D3E4FCE-3598-49BC-8FCB-C28E115FEABF}"
 	ProjectSection(SolutionItems) = preProject
-		compose.yaml = compose.yaml
 		Dockerfile = Dockerfile
 		.dockerignore = .dockerignore
 	EndProjectSection
