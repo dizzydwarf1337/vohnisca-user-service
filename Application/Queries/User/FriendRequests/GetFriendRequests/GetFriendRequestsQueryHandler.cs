@@ -9,14 +9,14 @@ namespace Application.Queries.User.FriendRequests.GetFriendRequests;
 
 public class
     GetFriendRequestsQueryHandler : IRequestHandler<GetFriendRequestsQuery,
-    Either<Error, GetFriendRequestsQuery.Result>>
+    Either<Error, GetFriendRequestsQuery.FriendRequest[]>>
 {
     private readonly IUserRepository _userRepository;
 
     public GetFriendRequestsQueryHandler(IUserRepository userRepository)
         => _userRepository = userRepository;
 
-    public async Task<Either<Error, GetFriendRequestsQuery.Result>> Handle(GetFriendRequestsQuery request,
+    public async Task<Either<Error, GetFriendRequestsQuery.FriendRequest[]>> Handle(GetFriendRequestsQuery request,
         CancellationToken cancellationToken)
     {
         return await GetUser(request.AuthorizeData.UserId, cancellationToken)
@@ -36,7 +36,7 @@ public class
         return user;
     }
 
-    private async Task<GetFriendRequestsQuery.Result> ToResult(ICollection<FriendRequest> friendRequests,
+    private async Task<GetFriendRequestsQuery.FriendRequest[]> ToResult(ICollection<FriendRequest> friendRequests,
         CancellationToken cancellationToken)
     {
         var senderIds = friendRequests.Select(fr => fr.SentBy).Distinct().ToList();
@@ -55,6 +55,6 @@ public class
             fr.SentAt
         )).ToArray();
 
-        return new GetFriendRequestsQuery.Result(resultArray);
+        return resultArray;
     }
 }
