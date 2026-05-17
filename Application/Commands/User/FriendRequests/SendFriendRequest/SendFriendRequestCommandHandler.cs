@@ -57,9 +57,14 @@ public class SendFriendRequestCommandHandler : IRequestHandler<SendFriendRequest
 
     private async Task<Either<Error, Guid>> CheckRequestExists(Guid sentBy, Guid sentTo, CancellationToken token)
     {
-        var request = await _friendRequestRepository.GetAllEntities().FirstOrDefaultAsync(x =>
-            (x.SentBy == sentBy && x.SentTo == sentTo) ||
-            (x.SentBy == sentTo && x.SentTo == sentBy) && x.Status == FriendRequestStatus.Pending, token);
+        var request = await _friendRequestRepository.GetAllEntities()
+            .FirstOrDefaultAsync(x =>
+                    (
+                        (x.SentBy == sentBy && x.SentTo == sentTo) ||
+                        (x.SentBy == sentTo && x.SentTo == sentBy)
+                    ) &&
+                    x.Status == FriendRequestStatus.Pending,
+                token);
 
         return request is null
             ? sentTo
