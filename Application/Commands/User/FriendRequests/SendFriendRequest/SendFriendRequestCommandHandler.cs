@@ -35,7 +35,7 @@ public class SendFriendRequestCommandHandler : IRequestHandler<SendFriendRequest
     {
         var user = await _userRepository.GetAllEntities()
             .FirstOrDefaultAsync(
-                x => string.Equals(x.UserName, userName, StringComparison.OrdinalIgnoreCase) &&
+                x => string.Equals(x.UserName.ToLower(), userName.ToLower()) &&
                      x.UserSettings.Status == UserStatus.Activated, token);
 
         return user is not null
