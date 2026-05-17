@@ -22,11 +22,12 @@ public class SendFriendRequestCommandHandler : IRequestHandler<SendFriendRequest
         _userRepository = userRepository;
     }
 
-    public async Task<Either<Error, Unit>> Handle(SendFriendRequestCommand request, CancellationToken cancellationToken)
+    public async Task<Either<Error, Unit>> Handle(SendFriendRequestCommand command, CancellationToken cancellationToken)
     {
-        return await CheckUserExists(request.UserName, cancellationToken)
-            .BindAsync(id => CheckRequestExists(request.AuthorizeData.UserId, id, cancellationToken))
-            .BindAsync(id => FriendRequest.Create(request.AuthorizeData.UserId, id))
+        return await CheckUserExists(command.UserName, cancellationToken)
+            .BindAsync(id => CheckAlreadyFriends(id, command.AuthorizeData.UserId, cancellationToken).MapAsync(_ => id))
+            .BindAsync(id => CheckRequestExists(command.AuthorizeData.UserId, id, cancellationToken))
+            .BindAsync(id => FriendRequest.Create(command.AuthorizeData.UserId, id))
             .BindAsync(fr => _friendRequestRepository.SaveAsync(fr, cancellationToken))
             .MapToUnitAsync();
     }
@@ -41,6 +42,17 @@ public class SendFriendRequestCommandHandler : IRequestHandler<SendFriendRequest
         return user is not null
             ? user.Id
             : Error.New("User does not exist or has been blocked");
+    }
+
+    private async Task<Either<Error, Unit>> CheckAlreadyFriends(Guid id, Guid userId, CancellationToken token)
+    {
+        var userOpt = await _userRepository.GetByIdAsync(id, token);
+
+        return userOpt
+            .ToEither(Error.New("User not found"))
+            .Bind(user => user.Friends.Any(f => f.Id == userId)
+                ? Prelude.Left<Error, Unit>(Error.New("You are already friends"))
+                : Prelude.Right<Error, Unit>(Unit.Default));
     }
 
     private async Task<Either<Error, Guid>> CheckRequestExists(Guid sentBy, Guid sentTo, CancellationToken token)

@@ -6,16 +6,17 @@ namespace api.Controllers.User;
 
 public class UserController : BaseController
 {
-    public UserController(IMediator mediator) : base(mediator) { }
-    
-    public async Task<object> UpdateUserData(UpdateUserDataCommand command)
+    public UserController(IMediator mediator) : base(mediator)
     {
-        return await HandleRpcResponse(command);
     }
-    
+
+    public async Task<object> UpdateUserData(UpdateUserDataCommand request)
+    {
+        return await HandleRpcResponse(request);
+    }
+
     public async Task<object> GetMe()
     {
-        var query = new GetMeQuery();
-        return await HandleRpcResponse(query);
-    } 
+        return await HandleRpcResponse(new GetMeQuery());
+    }
 }

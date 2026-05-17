@@ -12,16 +12,16 @@ public class FriendRequestController : BaseController
     {
     }
 
-    public async Task<object> SendFriendRequest(SendFriendRequestCommand command)
-        => await HandleRpcResponse(command);
+    public async Task<object> SendFriendRequest(SendFriendRequestCommand request)
+        => await HandleRpcResponse(request);
 
 
-    public async Task<object> AcceptFriendRequest(AcceptFriendRequestCommand command)
-        => await HandleRpcResponse(command);
+    public async Task<object> AcceptFriendRequest(AcceptFriendRequestCommand request)
+        => await HandleRpcResponse(request);
 
 
-    public async Task<object> RejectFriendRequest(RejectFriendRequestCommand command)
-        => await HandleRpcResponse(command);
+    public async Task<object> RejectFriendRequest(RejectFriendRequestCommand request)
+        => await HandleRpcResponse(request);
 
     public async Task<object> ReceivedFriendRequests()
         => await HandleRpcResponse(new GetFriendRequestsQuery());
