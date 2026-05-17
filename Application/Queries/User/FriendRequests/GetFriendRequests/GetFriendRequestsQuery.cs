@@ -5,5 +5,5 @@ namespace Application.Queries.User.FriendRequests.GetFriendRequests;
 
 public class GetFriendRequestsQuery : UserRequest<IEnumerable<GetFriendRequestsQuery.FriendRequest>>
 {
-    public record FriendRequest(Guid Id, string UserName, FriendRequestStatus Status, DateTime SentAt);
+    public record FriendRequest(Guid Id, string UserName, FriendRequestStatus Status, DateTime SentAt, DateTime? StatusChangedAt);
 }

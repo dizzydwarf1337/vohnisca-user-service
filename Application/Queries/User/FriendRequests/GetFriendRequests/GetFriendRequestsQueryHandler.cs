@@ -52,7 +52,8 @@ public class
             fr.Id,
             senderDict.GetValueOrDefault(fr.SentBy, "Unknown"),
             fr.Status,
-            fr.SentAt
+            fr.SentAt,
+            fr.StatusChangedAt
         )).ToArray();
 
         return resultArray;
