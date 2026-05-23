@@ -1,4 +1,6 @@
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using EdjCase.JsonRpc.Router;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -27,6 +29,17 @@ public static class AppServices
         services.AddJsonRpc(new RpcServerConfiguration()
         {
             ShowServerExceptions = false,
+            JsonSerializerSettings = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                MaxDepth = 10,
+                PropertyNameCaseInsensitive = true,
+                Converters =
+                {
+                    new JsonStringEnumConverter(JsonNamingPolicy.CamelCase),
+                },
+            },
+                
         });
         return services;
     }

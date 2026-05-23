@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Application.Core.Mediatr.Requests;
 
@@ -17,7 +17,12 @@ public class AuthorizeData
         Token = token;
     }
 
+    [JsonIgnore]
     public Guid UserId { get; set; }
+    
+    [JsonIgnore]
     public string Role { get; set; }
+    
+    [JsonIgnore]
     public string Token { get; set; }
 }

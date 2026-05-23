@@ -6,31 +6,28 @@ using LanguageExt.Common;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Queries.User.FriendRequests.GetFriendRequests;
+namespace Application.Queries.User.FriendRequests.GetSentFriendRequests;
 
-public class
-    GetFriendRequestsQueryHandler : IRequestHandler<GetFriendRequestsQuery,
-    Either<Error, PaginationResponse<GetFriendRequestsQuery.FriendRequest>>>
+public class GetSentFriendRequestsQueryHandler : IRequestHandler<GetSentFriendRequestsQuery,
+    Either<Error, PaginationResponse<GetSentFriendRequestsQuery.FriendRequest>>>
 {
     private readonly IFriendRequestRepository _friendRequestRepository;
     private readonly IUserRepository _userRepository;
 
-    public GetFriendRequestsQueryHandler(IFriendRequestRepository friendRequestRepository,
+    public GetSentFriendRequestsQueryHandler(IFriendRequestRepository friendRequestRepository,
         IUserRepository userRepository)
     {
         _friendRequestRepository = friendRequestRepository;
         _userRepository = userRepository;
     }
 
-    public async Task<Either<Error, PaginationResponse<GetFriendRequestsQuery.FriendRequest>>> Handle(
-        GetFriendRequestsQuery request,
-        CancellationToken cancellationToken)
+    public async Task<Either<Error, PaginationResponse<GetSentFriendRequestsQuery.FriendRequest>>> Handle(
+        GetSentFriendRequestsQuery request, CancellationToken cancellationToken)
     {
         var baseQuery = _friendRequestRepository.GetAllEntities()
             .Where(x =>
-                x.SentTo == request.AuthorizeData.UserId &&
-                x.Status != FriendRequestStatus.Deleted &&
-                x.Status != FriendRequestStatus.Cancelled
+                x.SentBy == request.AuthorizeData.UserId &&
+                x.Status != FriendRequestStatus.Deleted
             );
 
         var totalCount = await baseQuery.CountAsync(cancellationToken);
@@ -42,7 +39,7 @@ public class
             .Take(request.Pagination.PageSize)
             .ToListAsync(cancellationToken);
 
-        var senderIds = friendRequests.Select(fr => fr.SentBy).Distinct().ToList();
+        var senderIds = friendRequests.Select(fr => fr.SentTo).Distinct().ToList();
 
         var senders = await _userRepository.GetAllEntities()
             .Where(u => senderIds.Contains(u.Id))
@@ -51,15 +48,15 @@ public class
 
         var senderDict = senders.ToDictionary(u => u.Id, u => u.UserName);
 
-        var resultArray = friendRequests.Select(fr => new GetFriendRequestsQuery.FriendRequest(
+        var resultArray = friendRequests.Select(fr => new GetSentFriendRequestsQuery.FriendRequest(
             fr.Id,
-            senderDict.GetValueOrDefault(fr.SentBy, "Unknown"),
+            senderDict.GetValueOrDefault(fr.SentTo, "Unknown"),
             fr.Status,
             fr.SentAt,
             fr.StatusChangedAt
         )).ToArray();
 
-        return new PaginationResponse<GetFriendRequestsQuery.FriendRequest>(request.Pagination.Page,
+        return new PaginationResponse<GetSentFriendRequestsQuery.FriendRequest>(request.Pagination.Page,
             request.Pagination.PageSize, hasNextPage, pagesCount, resultArray);
     }
 }

@@ -8,21 +8,22 @@ namespace Persistence.Database;
 
 public class VohniscaDbContext : DbContext
 {
-    public VohniscaDbContext(DbContextOptions<VohniscaDbContext> options) : base(options) { }
-    
+    public VohniscaDbContext(DbContextOptions<VohniscaDbContext> options) : base(options)
+    {
+    }
+
     public DbSet<User> Users { get; set; }
     public DbSet<Chat> Chats { get; set; }
     public DbSet<Message> Messages { get; set; }
     public DbSet<MessageAttachment> MessageAttachments { get; set; }
     public DbSet<MessageReadStatus> MessageReadStatuses { get; set; }
     public DbSet<Notification> Notifications { get; set; }
-    
     public DbSet<FriendRequest> FriendRequests { get; set; }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
+
         modelBuilder.ApplyConfiguration(new ConfigureUsers());
         modelBuilder.ApplyConfiguration(new ConfigureChats());
         modelBuilder.ApplyConfiguration(new ConfigureMessages());

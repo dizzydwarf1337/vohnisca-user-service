@@ -29,6 +29,8 @@ public class ConfigureFriendRequests : IEntityTypeConfiguration<FriendRequest>
             .HasForeignKey(x => x.SentTo)
             .OnDelete(DeleteBehavior.Restrict);
         
-        builder.HasIndex(x => new { x.SentBy, x.SentTo }).IsUnique();
+        builder.HasIndex(x => new { x.SentBy, x.SentTo })
+            .IsUnique()
+            .HasFilter("\"Status\" = 0");
     }
 }

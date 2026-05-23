@@ -8,31 +8,33 @@ namespace Domain.Models.Users;
 
 public class User
 {
-    protected User() { }
-    
+    protected User()
+    {
+    }
+
     public Guid Id { get; private set; } = Guid.NewGuid();
 
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
-    
+
     public DateTime? LastSeenAt { get; private set; }
-    
+
     public DateTime? UpdatedAt { get; private set; }
-    
+
     public string UserName { get; private set; }
 
     public string Email { get; private set; }
-    
+
     public string Bio { get; private set; }
-    
+
     public virtual ICollection<User> Friends { get; set; } = new List<User>();
     public virtual ICollection<Chat> Chats { get; set; } = new List<Chat>();
-    public virtual ICollection<Notification>  Notifications { get; set; } = new List<Notification>();
+    public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
-    public ICollection<FriendRequest> SentFriendRequests { get; set; } = new List<FriendRequest>();
+    public virtual ICollection<FriendRequest> SentFriendRequests { get; set; } = new List<FriendRequest>();
 
-    public ICollection<FriendRequest> ReceivedFriendRequests { get; set; } = new List<FriendRequest>();
-    
-    public UserSettings UserSettings { get; init; } 
+    public virtual ICollection<FriendRequest> ReceivedFriendRequests { get; set; } = new List<FriendRequest>();
+
+    public UserSettings UserSettings { get; init; }
 
     public static Either<Error, User> Create(string userName, string email, string bio, Guid? userId = null)
     {
@@ -41,7 +43,7 @@ public class User
 
         return new User
         {
-            Id = userId ?? Guid.NewGuid(), 
+            Id = userId ?? Guid.NewGuid(),
             UserName = userName.Trim(),
             Email = email.Trim(),
             Bio = bio.Trim(),
@@ -58,21 +60,21 @@ public class User
             return Error.New("User already has this email");
         if (string.IsNullOrWhiteSpace(newEmail) || !newEmail.Contains('@'))
             return Error.New("Invalid email format");
-        
-        Email =  newEmail.Trim();
+
+        Email = newEmail.Trim();
         UpdatedAt = DateTime.UtcNow;
         return this;
     }
 
     public Either<Error, User> UpdateUserData(string newUserName, string newBio)
     {
-        if(string.IsNullOrEmpty(newUserName))
+        if (string.IsNullOrEmpty(newUserName))
             return Error.New("Invalid user name");
-        
+
         UserName = newUserName.Trim();
         Bio = newBio.Trim();
         UpdatedAt = DateTime.UtcNow;
-        
+
         return this;
     }
 
@@ -80,11 +82,11 @@ public class User
     {
         if (Friends.Contains(user))
             return Error.New("Users already friends");
-        
+
         Friends.Add(user);
         if (!user.Friends.Contains(this))
             user.Friends.Add(this);
-        
+
         return this;
     }
 
@@ -92,11 +94,11 @@ public class User
     {
         if (!Friends.Contains(user))
             return Error.New("Users are not friends");
-        
+
         Friends.Remove(user);
         if (user.Friends.Contains(this))
             user.Friends.Remove(this);
-        
+
         return this;
     }
 
@@ -105,11 +107,12 @@ public class User
         LastSeenAt = DateTime.UtcNow;
         return this;
     }
+
     public Either<Error, User> Activate()
     {
         if (UserSettings.Status == UserStatus.Activated)
             return Error.New("User already active");
-        
+
         UserSettings.Status = UserStatus.Activated;
         UserSettings.ActivatedAt = DateTime.UtcNow;
         UserSettings.BlockedAt = null;

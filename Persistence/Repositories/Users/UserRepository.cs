@@ -10,9 +10,10 @@ namespace Persistence.Repositories.Users;
 public class UserRepository : IUserRepository
 {
     private readonly VohniscaDbContext _context;
+
     public UserRepository(VohniscaDbContext context)
         => _context = context;
-    
+
     public IQueryable<User> GetAllEntities()
     {
         return _context.Users.AsQueryable();
@@ -20,7 +21,12 @@ public class UserRepository : IUserRepository
 
     public async Task<Option<User>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _context.Users.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        return await _context.Users
+            .Include(x => x.Friends)
+            .Include(x => x.Notifications)
+            .Include(x => x.ReceivedFriendRequests)
+            .Include(x => x.SentFriendRequests)
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
     public async Task<Either<Error, User>> SaveAsync(User entity, CancellationToken cancellationToken)
