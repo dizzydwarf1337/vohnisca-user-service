@@ -3,9 +3,9 @@ using Application.Core.Requests;
 using Application.Core.Responses;
 using Domain.Models.Users.Enums;
 
-namespace Application.Queries.User.FriendRequests.GetFriendRequests;
+namespace Application.Queries.User.FriendRequests.GetSentFriendRequests;
 
-public class GetFriendRequestsQuery : UserRequest<PaginationResponse<GetFriendRequestsQuery.FriendRequest>>
+public class GetSentFriendRequestsQuery : UserRequest<PaginationResponse<GetSentFriendRequestsQuery.FriendRequest>>
 {
     public PaginationSpecification Pagination { get; set; }
 

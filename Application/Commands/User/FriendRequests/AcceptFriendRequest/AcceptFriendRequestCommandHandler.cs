@@ -48,8 +48,10 @@ public class AcceptFriendRequestCommandHandler : IRequestHandler<AcceptFriendReq
 
     private async Task<Either<Error, Unit>> AddFriends(Guid firstId, Guid secondId, CancellationToken token)
     {
-        var firstUser = await _userRepository.GetAllEntities().FirstOrDefaultAsync(x => x.Id == firstId, token);
-        var secondUser = await _userRepository.GetAllEntities().FirstOrDefaultAsync(x => x.Id == secondId, token);
+        var firstUser = await _userRepository.GetAllEntities().Include(x => x.Friends)
+            .FirstOrDefaultAsync(x => x.Id == firstId, token);
+        var secondUser = await _userRepository.GetAllEntities().Include(x => x.Friends)
+            .FirstOrDefaultAsync(x => x.Id == secondId, token);
 
         if (firstUser == null || secondUser == null)
             return Error.New("Error while adding new friend");

@@ -44,13 +44,14 @@ public class SendFriendRequestCommandHandler : IRequestHandler<SendFriendRequest
             : Error.New("User does not exist or has been blocked");
     }
 
-    private async Task<Either<Error, Unit>> CheckAlreadyFriends(Guid id, Guid userId, CancellationToken token)
+    private async Task<Either<Error, Unit>> CheckAlreadyFriends(Guid firstUserId, Guid secondUserId,
+        CancellationToken token)
     {
-        var userOpt = await _userRepository.GetByIdAsync(id, token);
+        var userOpt = await _userRepository.GetByIdAsync(firstUserId, token);
 
         return userOpt
             .ToEither(Error.New("User not found"))
-            .Bind(user => user.Friends.Any(f => f.Id == userId)
+            .Bind(user => user.Friends.Any(f => f.Id == secondUserId)
                 ? Prelude.Left<Error, Unit>(Error.New("You are already friends"))
                 : Prelude.Right<Error, Unit>(Unit.Default));
     }
