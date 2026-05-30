@@ -23,6 +23,7 @@ public class GetMeQueryHandler : IRequestHandler<GetMeQuery, Either<Error, GetMe
     private GetMeQuery.Result FillUserData(Domain.Models.Users.User user)
     {
         return new GetMeQuery.Result(
+            user.Id.ToString(),
             user.UserName,
             user.Email,
             user.Bio,

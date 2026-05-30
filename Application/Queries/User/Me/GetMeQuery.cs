@@ -5,6 +5,7 @@ namespace Application.Queries.User.Me;
 public class GetMeQuery : UserRequest<GetMeQuery.Result>
 {
     public record Result(
+        string Id,
         string UserName,
         string Email,
         string Bio,
