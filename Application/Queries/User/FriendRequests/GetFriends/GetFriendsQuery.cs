@@ -8,5 +8,5 @@ public class GetFriendsQuery : UserRequest<PaginationResponse<GetFriendsQuery.Fr
 {
     public PaginationSpecification Pagination { get; set; }
 
-    public record Friend(Guid Id, string UserName, DateTime? LastSeen);
+    public record Friend(Guid Id, string UserName, string ProfilePicturePath, DateTime? LastSeen);
 }

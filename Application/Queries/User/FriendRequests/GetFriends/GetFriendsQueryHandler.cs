@@ -33,7 +33,7 @@ public class
             .OrderByDescending(f => f.Id)
             .Skip((request.Pagination.Page - 1) * request.Pagination.PageSize)
             .Take(request.Pagination.PageSize)
-            .Select(f => new GetFriendsQuery.Friend(f.Id, f.UserName, f.LastSeenAt))
+            .Select(f => new GetFriendsQuery.Friend(f.Id, f.UserName, f.ProfilePicturePath, f.LastSeenAt))
             .ToArray();
 
         return new PaginationResponse<GetFriendsQuery.Friend>(

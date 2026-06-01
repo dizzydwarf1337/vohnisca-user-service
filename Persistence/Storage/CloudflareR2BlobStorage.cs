@@ -19,6 +19,7 @@ public sealed class CloudflareR2BlobStorage(IAmazonS3 s3, R2StorageConfig config
                 InputStream = request.Content,
                 ContentType = request.ContentType,
                 AutoCloseStream = false,
+                DisablePayloadSigning = true
             }, ct);
 
             return new Uri($"{config.PublicBaseUrl.TrimEnd('/')}/{request.Key}");
