@@ -1,9 +1,11 @@
 using Application.Core.Extensions;
+using Application.Events;
 using Domain.Interfaces.Users;
 using Domain.Models.Users;
 using Domain.Models.Users.Enums;
 using LanguageExt;
 using LanguageExt.Common;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Unit = LanguageExt.Unit;
@@ -14,12 +16,14 @@ public class AcceptFriendRequestCommandHandler : IRequestHandler<AcceptFriendReq
 {
     private readonly IFriendRequestRepository _friendRequestRepository;
     private readonly IUserRepository _userRepository;
+    private readonly IPublishEndpoint _publishEndpoint;
 
     public AcceptFriendRequestCommandHandler(IFriendRequestRepository friendRequestRepository,
-        IUserRepository userRepository)
+        IUserRepository userRepository, IPublishEndpoint publishEndpoint)
     {
         _friendRequestRepository = friendRequestRepository;
         _userRepository = userRepository;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task<Either<Error, Unit>> Handle(AcceptFriendRequestCommand request,
@@ -28,8 +32,7 @@ public class AcceptFriendRequestCommandHandler : IRequestHandler<AcceptFriendReq
         return await GetFriendRequest(request.Id, request.AuthorizeData.UserId, cancellationToken)
             .BindAsync(fr => fr.Accept())
             .BindAsync(fr => _friendRequestRepository.UpdateAsync(fr, cancellationToken))
-            .BindAsync(fr => AddFriends(fr.SentBy, fr.SentTo, cancellationToken))
-            .MapToUnitAsync();
+            .BindAsync(fr => AddFriends(fr.SentBy, fr.SentTo, cancellationToken));
     }
 
     private async Task<Either<Error, FriendRequest>> GetFriendRequest(Guid id, Guid userId, CancellationToken token)
@@ -58,6 +61,12 @@ public class AcceptFriendRequestCommandHandler : IRequestHandler<AcceptFriendReq
 
         return await firstUser.AddFriend(secondUser)
             .BindAsync(_ => _userRepository.UpdateAsync(firstUser, token))
-            .MapToUnitAsync();
+            .BindAsync(_ => Publish(firstId, secondId, token));
+    }
+
+    private async Task<Either<Error, Unit>> Publish(Guid firstUserId, Guid secondUserId, CancellationToken token)
+    {
+        await _publishEndpoint.Publish(new FriendAddedEvent(firstUserId, secondUserId), token);
+        return Unit.Default;
     }
 }

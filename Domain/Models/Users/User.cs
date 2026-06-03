@@ -26,6 +26,8 @@ public class User
 
     public string Bio { get; private set; }
 
+    public string ProfilePicturePath { get; private set; } = string.Empty;
+
     public virtual ICollection<User> Friends { get; set; } = new List<User>();
     public virtual ICollection<Chat> Chats { get; set; } = new List<Chat>();
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
@@ -72,7 +74,7 @@ public class User
             return Error.New("Invalid user name");
 
         UserName = newUserName.Trim();
-        Bio = newBio.Trim();
+        Bio = newBio?.Trim() ?? string.Empty;
         UpdatedAt = DateTime.UtcNow;
 
         return this;
@@ -142,6 +144,26 @@ public class User
         UserSettings.DeletedAt = DateTime.UtcNow;
         UserSettings.BlockedAt = null;
         UserSettings.ActivatedAt = null;
+        return this;
+    }
+
+    public Either<Error, User> SetProfilePicture(string url)
+    {
+        if (ProfilePicturePath.Equals(url, StringComparison.OrdinalIgnoreCase))
+            return this;
+
+        ProfilePicturePath = url;
+
+        return this;
+    }
+
+    public Either<Error, User> SetProfileVisibility(bool isPrivate)
+    {
+        if (UserSettings.IsPrivate != isPrivate)
+        {
+            UserSettings.IsPrivate = isPrivate;
+        }
+
         return this;
     }
 }

@@ -9,9 +9,11 @@ public class GetMeQuery : UserRequest<GetMeQuery.Result>
         string UserName,
         string Email,
         string Bio,
+        string ProfilePicturePath,
         DateTime CreatedAt,
+        bool IsPrivate,
         bool HasUnreadNotifications,
         bool HasUnreadMessages,
         int FriendsOnline
-        );
+    );
 }

@@ -1,4 +1,6 @@
+using Application.Commands.User.Users.DeleteProfilePicture;
 using Application.Commands.User.Users.UpdateUserData;
+using Application.Queries.User.GetUser;
 using Application.Queries.User.Me;
 using MediatR;
 
@@ -19,4 +21,12 @@ public class UserController : BaseController
     {
         return await HandleRpcResponse(new GetMeQuery());
     }
+
+    public async Task<object> GetUser(GetUserQuery request)
+    {
+        return await HandleRpcResponse(request);
+    }
+
+    public async Task<object> DeleteProfilePicture()
+        => await HandleRpcResponse(new DeleteProfilePictureCommand());
 }
