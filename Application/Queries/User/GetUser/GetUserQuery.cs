@@ -8,7 +8,7 @@ public class GetUserQuery : UserRequest<GetUserQuery.User>
 
     public record User(
         Guid Id,
-        string Username,
+        string UserName,
         string Bio,
         string ProfilePicturePath,
         DateTime CreatedAt,

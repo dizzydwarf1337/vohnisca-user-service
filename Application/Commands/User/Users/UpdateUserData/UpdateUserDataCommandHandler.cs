@@ -1,9 +1,10 @@
-using Application.Core.Extensions;
 using Application.Core.Storage;
+using Application.Events;
 using Application.Interfaces.Storage;
 using Domain.Interfaces.Users;
 using LanguageExt;
 using LanguageExt.Common;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Unit = LanguageExt.Unit;
@@ -14,11 +15,14 @@ public class UpdateUserDataCommandHandler : IRequestHandler<UpdateUserDataComman
 {
     private readonly IUserRepository _userRepository;
     private readonly IBlobStorage _blobStorage;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public UpdateUserDataCommandHandler(IUserRepository userRepository, IBlobStorage blobStorage)
+    public UpdateUserDataCommandHandler(IUserRepository userRepository, IBlobStorage blobStorage,
+        IPublishEndpoint publishEndpoint)
     {
         _userRepository = userRepository;
         _blobStorage = blobStorage;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task<Either<Error, Unit>> Handle(UpdateUserDataCommand command, CancellationToken cancellationToken)
@@ -29,7 +33,7 @@ public class UpdateUserDataCommandHandler : IRequestHandler<UpdateUserDataComman
             .BindAsync(u => u.UpdateUserData(command.UserData.UserName, command.UserData.Bio))
             .BindAsync(u => u.SetProfileVisibility(command.UserData.IsPrivate))
             .BindAsync(u => _userRepository.UpdateAsync(u, cancellationToken))
-            .MapToUnitAsync();
+            .BindAsync(u => Publish(u, cancellationToken));
     }
 
     private async Task<Either<Error, Unit>> CheckUserName(string userName, Guid userId, CancellationToken token)
@@ -71,5 +75,13 @@ public class UpdateUserDataCommandHandler : IRequestHandler<UpdateUserDataComman
                 ContentType: request.UserData.ProfilePictureContentType ?? "image/jpeg"
             ), token)
             .BindAsync(uri => user.SetProfilePicture(uri.ToString()));
+    }
+
+    private async Task<Either<Error, Unit>> Publish(Domain.Models.Users.User user, CancellationToken token)
+    {
+        await _publishEndpoint.Publish(new UserProfileDataChangedEvent(user.Id, user.UserName, user.ProfilePicturePath,
+            user.UserSettings.IsPrivate), token);
+
+        return Unit.Default;
     }
 }

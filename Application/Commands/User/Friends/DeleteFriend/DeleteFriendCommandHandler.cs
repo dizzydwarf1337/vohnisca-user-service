@@ -1,7 +1,8 @@
-using Application.Core.Extensions;
+using Application.Events;
 using Domain.Interfaces.Users;
 using LanguageExt;
 using LanguageExt.Common;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Unit = LanguageExt.Unit;
@@ -11,15 +12,19 @@ namespace Application.Commands.User.Friends.DeleteFriend;
 public class DeleteFriendCommandHandler : IRequestHandler<DeleteFriendCommand, Either<Error, Unit>>
 {
     private readonly IUserRepository _userRepository;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public DeleteFriendCommandHandler(IUserRepository userRepository)
-        => _userRepository = userRepository;
+    public DeleteFriendCommandHandler(IUserRepository userRepository, IPublishEndpoint publishEndpoint)
+    {
+        _userRepository = userRepository;
+        _publishEndpoint = publishEndpoint;
+    }
 
     public async Task<Either<Error, Unit>> Handle(DeleteFriendCommand request, CancellationToken cancellationToken)
     {
         return await GetUser(request.AuthorizeData.UserId, cancellationToken)
             .BindAsync(u => DeleteFriend(u, request.Id, cancellationToken))
-            .MapToUnitAsync();
+            .BindAsync(u => Publish(u.Id, request.Id, cancellationToken));
     }
 
     private async Task<Either<Error, Domain.Models.Users.User>> GetUser(Guid userId, CancellationToken token)
@@ -43,5 +48,11 @@ public class DeleteFriendCommandHandler : IRequestHandler<DeleteFriendCommand, E
 
         return await user.RemoveFriend(friend)
             .BindAsync(_ => _userRepository.UpdateAsync(user, token));
+    }
+
+    private async Task<Either<Error, Unit>> Publish(Guid firstUserId, Guid secondUserId, CancellationToken token)
+    {
+        await _publishEndpoint.Publish(new FriendRemovedEvent(firstUserId, secondUserId), token);
+        return Unit.Default;
     }
 }

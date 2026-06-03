@@ -74,7 +74,7 @@ public class User
             return Error.New("Invalid user name");
 
         UserName = newUserName.Trim();
-        Bio = newBio.Trim();
+        Bio = newBio?.Trim() ?? string.Empty;
         UpdatedAt = DateTime.UtcNow;
 
         return this;

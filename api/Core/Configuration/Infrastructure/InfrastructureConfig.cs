@@ -21,7 +21,6 @@ public static class InfrastructureConfig
             x.UsingRabbitMq((context, cfg) =>
             {
                 cfg.UseRawJsonDeserializer();
-                cfg.Message<UserCreatedEvent>(m => m.SetEntityName("user-created"));
                 cfg.Host("rabbitmq", "/", h =>
                 {
                     h.Username("guest");
@@ -29,7 +28,6 @@ public static class InfrastructureConfig
                 });
                 cfg.ReceiveEndpoint("user-service-user-created",
                     e => { e.ConfigureConsumer<UserCreatedConsumer>(context); });
-                cfg.ConfigureEndpoints(context);
             });
         });
         services.AddMediatR(cfg => { cfg.RegisterServicesFromAssembly(typeof(CreateUserDataCommand).Assembly); });
